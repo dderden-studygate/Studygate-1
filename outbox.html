@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>Study Gate Outbox</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --border: #dbe3f0;
+      --success: #166534;
+      --success-bg: #dcfce7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #edf4ff 0%, var(--bg) 45%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      font-size: 34px;
+      line-height: 1.05;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .sub {
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 720px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button, .link-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+    }
+
+    .secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .stat-value {
+      margin-top: 8px;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .entry {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+    }
+
+    .entry-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .entry-kind {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .entry-time {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: var(--success-bg);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    pre {
+      margin: 14px 0 0;
+      border-radius: 16px;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 14px;
+      overflow: auto;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .empty {
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 22px;
+      padding: 30px 22px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 15px;
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1 class="title">Study Gate Outbox</h1>
+        <div class="sub">
+          Parent confirmation emails, quiz result emails, and quiz result texts are captured here by the local app server.
+          This makes the exported prototype behave like a working app even without a live mail provider.
+        </div>
+      </div>
+      <div class="actions">
+        <a class="link-btn secondary" href="./index.html">Back To App</a>
+        <button class="secondary" id="refresh-btn" type="button">Refresh</button>
+        <button class="primary" id="clear-btn" type="button">Clear Outbox</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Total Entries</div>
+        <div class="stat-value" id="total-count">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Latest Type</div>
+        <div class="stat-value" id="latest-kind">-</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Last Updated</div>
+        <div class="stat-value" id="latest-time">-</div>
+      </div>
+    </div>
+
+    <div class="list" id="entry-list"></div>
+  </div>
+
+  <script>
+    const OUTBOX_STORAGE_KEY = "studygate_clean_rebuild_v2_outbox";
+    const totalCountEl = document.getElementById("total-count");
+    const latestKindEl = document.getElementById("latest-kind");
+    const latestTimeEl = document.getElementById("latest-time");
+    const entryListEl = document.getElementById("entry-list");
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleString();
+    }
+
+    function labelForKind(kind) {
+      switch (kind) {
+        case "parent-confirmation":
+          return "Parent Confirmation";
+        case "quiz-results-email":
+          return "Quiz Results Email";
+        case "quiz-results-text":
+          return "Quiz Results Text";
+        default:
+          return kind || "Unknown";
+      }
+    }
+
+    function recipientSummary(payload) {
+      const parts = [];
+      if (payload?.parentName) parts.push(payload.parentName);
+      if (payload?.parentEmail) parts.push(payload.parentEmail);
+      if (payload?.parentPhone) parts.push(payload.parentPhone);
+      return parts.join(" | ");
+    }
+
+    function renderEntries(entries) {
+      totalCountEl.textContent = String(entries.length);
+      latestKindEl.textContent = entries.length ? labelForKind(entries[0].kind) : "-";
+      latestTimeEl.textContent = entries.length ? formatDate(entries[0].sentAt) : "-";
+
+      if (!entries.length) {
+        entryListEl.innerHTML = '<div class="empty">No messages have been queued yet. Use the app to save a parent contact or send quiz results.</div>';
+        return;
+      }
+
+      entryListEl.innerHTML = entries.map((entry) => `
+        <article class="entry">
+          <div class="entry-top">
+            <div class="entry-kind">${labelForKind(entry.kind)}</div>
+            <div class="entry-time">${formatDate(entry.sentAt)}</div>
+          </div>
+          <div class="chips">
+            <div class="chip">${entry.route}</div>
+            <div class="chip">${recipientSummary(entry.payload) || "Local outbox entry"}</div>
+          </div>
+          <pre>${escapeHtml(JSON.stringify(entry.payload, null, 2))}</pre>
+        </article>
+      `).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function readLocalOutbox() {
+      try {
+        const raw = localStorage.getItem(OUTBOX_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    async function loadOutbox() {
+      try {
+        const response = await fetch("./api/outbox");
+        if (!response.ok) {
+          throw new Error(`Outbox server returned ${response.status}`);
+        }
+        const data = await response.json();
+        renderEntries(Array.isArray(data.entries) ? data.entries : []);
+      } catch (error) {
+        renderEntries(readLocalOutbox());
+      }
+    }
+
+    async function clearOutbox() {
+      try {
+        const response = await fetch("./api/outbox/clear", { method: "POST" });
+        if (!response.ok) {
+          throw new Error(`Outbox clear returned ${response.status}`);
+        }
+      } catch (error) {
+        localStorage.removeItem(OUTBOX_STORAGE_KEY);
+      }
+      await loadOutbox();
+    }
+
+    document.getElementById("refresh-btn").addEventListener("click", loadOutbox);
+    document.getElementById("clear-btn").addEventListener("click", clearOutbox);
+
+    loadOutbox().catch((error) => {
+      entryListEl.innerHTML = `<div class="empty">Could not load the outbox. ${escapeHtml(error.message || String(error))}</div>`;
+    });
+  </script>
+</body>
+</html>
