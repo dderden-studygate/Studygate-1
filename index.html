@@ -65,6 +65,194 @@
  color:rgba(255,255,255,.88);
  line-height:1.45;
 }
+.startup-guide-overlay{
+ position:fixed;
+ inset:0;
+ z-index:200;
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+ padding:18px 14px max(18px, env(safe-area-inset-bottom));
+ background:rgba(15,23,42,.66);
+ backdrop-filter:blur(6px);
+}
+.startup-guide-card{
+ width:min(100%, 520px);
+ max-height:min(88svh, 760px);
+ overflow:auto;
+ border-radius:24px;
+ background:#fff;
+ box-shadow:0 28px 80px rgba(15,23,42,.32);
+ border:1px solid rgba(148,163,184,.22);
+}
+.startup-guide-head{
+ padding:18px 18px 12px;
+ border-bottom:1px solid #e2e8f0;
+ background:linear-gradient(180deg,#f8fbff,#ffffff);
+}
+.startup-guide-eyebrow{
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:.08em;
+ text-transform:uppercase;
+ color:#2563eb;
+}
+.startup-guide-title{
+ margin-top:6px;
+ font-size:28px;
+ line-height:1.05;
+ font-weight:900;
+ color:#0f172a;
+}
+.startup-guide-sub{
+ margin-top:8px;
+ font-size:14px;
+ line-height:1.5;
+ color:#475569;
+}
+.startup-guide-progress{
+ margin-top:14px;
+ height:8px;
+ border-radius:999px;
+ background:#dbeafe;
+ overflow:hidden;
+}
+.startup-guide-progress-fill{
+ height:100%;
+ border-radius:999px;
+ background:linear-gradient(90deg,#2563eb,#38bdf8);
+}
+.startup-guide-step-label{
+ margin-top:10px;
+ font-size:12px;
+ font-weight:800;
+ color:#64748b;
+}
+.startup-guide-body{
+ padding:18px;
+ display:grid;
+ gap:14px;
+}
+.startup-guide-grid{
+ display:grid;
+ gap:12px;
+}
+.startup-guide-grid.two{
+ grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.startup-guide-section{
+ border:1px solid #e2e8f0;
+ border-radius:18px;
+ padding:14px;
+ background:#fff;
+ box-shadow:0 10px 20px rgba(15,23,42,.04);
+}
+.startup-guide-list{
+ display:grid;
+ gap:10px;
+ margin:0;
+ padding:0;
+ list-style:none;
+}
+.startup-guide-list li{
+ display:flex;
+ gap:10px;
+ align-items:flex-start;
+ color:#334155;
+ font-size:14px;
+ line-height:1.45;
+}
+.startup-guide-badge{
+ flex:0 0 auto;
+ width:26px;
+ height:26px;
+ border-radius:999px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:12px;
+ font-weight:900;
+ color:#1d4ed8;
+ background:#dbeafe;
+}
+.startup-guide-footer{
+ padding:16px 18px 18px;
+ border-top:1px solid #e2e8f0;
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ justify-content:space-between;
+ align-items:center;
+ background:#fff;
+}
+.startup-guide-actions{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-left:auto;
+}
+.startup-guide-btn{
+ min-width:112px;
+ min-height:46px;
+ padding:12px 16px;
+ border:none;
+ border-radius:14px;
+ font-size:14px;
+ font-weight:900;
+ cursor:pointer;
+}
+.startup-guide-btn.primary{
+ background:#2563eb;
+ color:#fff;
+ box-shadow:0 12px 24px rgba(37,99,235,.22);
+}
+.startup-guide-btn.secondary{
+ background:#eef2ff;
+ color:#1d4ed8;
+}
+.startup-guide-close{
+ border:none;
+ background:transparent;
+ color:#64748b;
+ font-size:13px;
+ font-weight:900;
+ cursor:pointer;
+ padding:8px 0;
+}
+.startup-guide-note{
+ font-size:12px;
+ color:#64748b;
+ line-height:1.45;
+}
+.startup-guide-message{
+ min-height:18px;
+ font-size:12px;
+ font-weight:800;
+ color:#b91c1c;
+}
+@media (max-width:640px){
+ .startup-guide-overlay{
+  padding:12px 10px max(10px, env(safe-area-inset-bottom));
+ }
+ .startup-guide-card{
+  border-radius:20px;
+ }
+ .startup-guide-title{
+  font-size:24px;
+ }
+ .startup-guide-grid.two{
+  grid-template-columns:1fr;
+ }
+ .startup-guide-footer{
+  display:grid;
+ }
+ .startup-guide-actions{
+  margin-left:0;
+ }
+ .startup-guide-btn{
+  width:100%;
+ }
+}
 .greeting-banner{
  margin-top:10px;
  padding:12px 14px;
@@ -1657,6 +1845,8 @@ const OUTBOX_STORAGE_KEY = `${STORAGE_KEY}_outbox`;
 const STUDYGATE_EMAIL_API_BASE = (window.location.origin && window.location.origin !== "null")
  ? window.location.origin
  : "";
+const STARTUP_GUIDE_VERSION = 1;
+const STARTUP_GUIDE_STEP_COUNT = 5;
 let deferredInstallPrompt = null;
 const THEME_OPTIONS = [{"value": "standard", "label": "Standard", "emoji": "🎓"}, {"value": "basketball", "label": "Basketball", "emoji": "🏀"}, {"value": "football", "label": "Football", "emoji": "🏈"}, {"value": "soccer", "label": "Soccer", "emoji": "⚽"}, {"value": "softball", "label": "Softball", "emoji": "🥎"}, {"value": "baseball", "label": "Baseball", "emoji": "⚾"}, {"value": "fishing", "label": "Fishing", "emoji": "🎣"}, {"value": "deer_hunting", "label": "Deer Hunting", "emoji": "🦌"}, {"value": "duck_hunting", "label": "Duck Hunting", "emoji": "🦆"}, {"value": "lego", "label": "LEGO", "emoji": "🧱"}, {"value": "star_wars", "label": "Star Wars", "emoji": "✨"}, {"value": "band", "label": "Band", "emoji": "🎵"}, {"value": "art", "label": "Art", "emoji": "🎨"}];
 const APPS = ["Facebook","Messages","ChatGPT","Outlook"];
@@ -4767,15 +4957,73 @@ parentAuthorizationSentAt: "",
  askedTracker: {},
  lastQuizSubject: "",
  studentProfiles: [],
- activeStudentId: ""
+ activeStudentId: "",
+ startupGuide: {
+ version: STARTUP_GUIDE_VERSION,
+ active: true,
+ completed: false,
+ step: 0,
+ message: "",
+ parentDraft: {
+  name: "",
+  email: "",
+  phone: ""
+ }
+ }
 };
+
+function hasExistingSetupData(rawState){
+ const rawSettings = ((rawState || {}).settings) || {};
+ const rawAnalytics = ((rawState || {}).analytics) || {};
+ return Boolean(
+  String(rawSettings.childName || "").trim() ||
+  (Array.isArray(rawSettings.parentContacts) && rawSettings.parentContacts.length) ||
+  Number(rawAnalytics.quizzesTaken || 0) > 0
+ );
+}
+
+function ensureStartupGuideState(targetState){
+ const next = targetState || state;
+ if(!next.startupGuide || typeof next.startupGuide !== "object"){
+  next.startupGuide = {};
+ }
+ if(typeof next.startupGuide.version !== "number"){
+  next.startupGuide.version = STARTUP_GUIDE_VERSION;
+ }
+ if(typeof next.startupGuide.completed !== "boolean"){
+  next.startupGuide.completed = false;
+ }
+ if(typeof next.startupGuide.active !== "boolean"){
+  next.startupGuide.active = !next.startupGuide.completed;
+ }
+ if(!Number.isFinite(Number(next.startupGuide.step))){
+  next.startupGuide.step = 0;
+ }
+ next.startupGuide.step = Math.max(0, Math.min(STARTUP_GUIDE_STEP_COUNT - 1, Number(next.startupGuide.step) || 0));
+ if(typeof next.startupGuide.message !== "string"){
+  next.startupGuide.message = "";
+ }
+ if(!next.startupGuide.parentDraft || typeof next.startupGuide.parentDraft !== "object"){
+  next.startupGuide.parentDraft = {};
+ }
+ const settings = next.settings || {};
+ const draft = next.startupGuide.parentDraft;
+ if(typeof draft.name !== "string") draft.name = "";
+ if(typeof draft.email !== "string") draft.email = "";
+ if(typeof draft.phone !== "string") draft.phone = "";
+ if(!draft.name && String(settings.parentName || "").trim()) draft.name = String(settings.parentName || "");
+ if(!draft.email && String(settings.parentEmail || "").trim()) draft.email = String(settings.parentEmail || "");
+ if(!draft.phone && String(settings.parentPhone || "").trim()) draft.phone = String(settings.parentPhone || "");
+ return next.startupGuide;
+}
 
 function loadState() {
  try {
  const raw = localStorage.getItem(STORAGE_KEY);
  if(!raw) return JSON.parse(JSON.stringify(defaultState));
+ const parsed = JSON.parse(raw);
  const merged = JSON.parse(JSON.stringify(defaultState));
- deepMerge(merged, JSON.parse(raw));
+ deepMerge(merged, parsed);
  merged.tab = "child";
  merged.childScreen = "home";
  merged.childTab = "apps";
@@ -4784,6 +5032,13 @@ function loadState() {
  merged.selected = null;
  merged.showAnswer = false;
  merged.result = null;
+ ensureStartupGuideState(merged);
+ if(!parsed.startupGuide && hasExistingSetupData(parsed)){
+  merged.startupGuide.active = false;
+  merged.startupGuide.completed = true;
+  merged.startupGuide.step = 0;
+  merged.startupGuide.message = "";
+ }
  return merged;
  } catch(e) {
  return JSON.parse(JSON.stringify(defaultState));
@@ -5757,20 +6012,27 @@ function verifyParentAuthorizationCode(code){
  return true;
 }
 
-function saveParentContactFromForm(){
- const parentNameInput = document.getElementById("parent-name-input");
- const parentEmailInput = document.getElementById("parent-email-input");
- const parentPhoneInput = document.getElementById("parent-phone-input");
- const name = parentNameInput ? cleanMailValue(parentNameInput.value) : "";
- const email = parentEmailInput ? cleanMailValue(parentEmailInput.value) : "";
- const phone = parentPhoneInput ? normalizeSmsPhone(parentPhoneInput.value) : "";
+function saveParentContactData(input, options = {}){
+ const source = input || {};
+ const allowEmpty = options.allowEmpty === true;
+ const suppressStatus = options.suppressStatus === true;
+ const name = cleanMailValue(source.name || "");
+ const email = cleanMailValue(source.email || "");
+ const phone = normalizeSmsPhone(source.phone || "");
  if(!email && !phone){
-  setParentDetailsStatus("Enter a parent email address or cell phone before saving.");
-  return null;
+  if(allowEmpty){
+   return { contact: null, error: "" };
+  }
+  if(!suppressStatus){
+   setParentDetailsStatus("Enter a parent email address or cell phone before saving.");
+  }
+  return { contact: null, error: "missing_contact" };
  }
  if(phone && !isLikelySmsPhone(phone)){
-  setParentDetailsStatus("Enter a full cell number, like 555-123-4567 or +15551234567.");
-  return null;
+  if(!suppressStatus){
+   setParentDetailsStatus("Enter a full cell number, like 555-123-4567 or +15551234567.");
+  }
+  return { contact: null, error: "invalid_phone" };
  }
  normalizeParentContacts();
  const existing = state.settings.parentContacts.find(contact => {
@@ -5808,7 +6070,19 @@ function saveParentContactFromForm(){
  state.settings.parentAuthorizedAt = "";
  state.settings.parentEmailAuthorized = false;
  saveStateQuietly();
- return contact;
+ return { contact, error: "" };
+}
+
+function saveParentContactFromForm(){
+ const parentNameInput = document.getElementById("parent-name-input");
+ const parentEmailInput = document.getElementById("parent-email-input");
+ const parentPhoneInput = document.getElementById("parent-phone-input");
+ const result = saveParentContactData({
+  name: parentNameInput ? parentNameInput.value : "",
+  email: parentEmailInput ? parentEmailInput.value : "",
+  phone: parentPhoneInput ? parentPhoneInput.value : ""
+ });
+ return result.contact;
 }
 
 function parentAuthorizationUrl(contact){
@@ -6207,6 +6481,86 @@ function updateMathCommonCoreEnabled(isEnabled) {
 function childDisplayName() {
  const raw = String(state.settings.childName || "").trim();
  return raw || "Child";
+}
+
+function startupGuideDraft(){
+ ensureStartupGuideState(state);
+ return state.startupGuide.parentDraft;
+}
+
+function startupGuideVisible(){
+ ensureStartupGuideState(state);
+ return !!state.startupGuide.active;
+}
+
+function startupGuideProgressPercent(){
+ ensureStartupGuideState(state);
+ return ((Number(state.startupGuide.step || 0) + 1) / STARTUP_GUIDE_STEP_COUNT) * 100;
+}
+
+function setAllSubjectGrades(value){
+ const nextGrade = Number(value || 5);
+ state.settings.grade = nextGrade;
+ state.settings.mathGrade = nextGrade;
+ state.settings.elaGrade = nextGrade;
+ state.settings.scienceGrade = nextGrade;
+ state.settings.historyGrade = nextGrade;
+ ensureValidMathAreaForGrade(nextGrade);
+ ensureValidElaAreaForGrade(nextGrade);
+ saveStateQuietly();
+}
+
+function setStartupGuideMessage(message){
+ ensureStartupGuideState(state);
+ state.startupGuide.message = message || "";
+ const el = document.getElementById("startup-guide-message");
+ if(el) el.textContent = state.startupGuide.message;
+}
+
+function openStartupGuide(step = 0){
+ ensureStartupGuideState(state);
+ state.startupGuide.active = true;
+ state.startupGuide.step = Math.max(0, Math.min(STARTUP_GUIDE_STEP_COUNT - 1, Number(step) || 0));
+ state.startupGuide.message = "";
+ render();
+ saveStateQuietly();
+}
+
+function closeStartupGuide(){
+ ensureStartupGuideState(state);
+ state.startupGuide.active = false;
+ state.startupGuide.message = "";
+ render();
+ saveStateQuietly();
+}
+
+function startupGuideBack(){
+ ensureStartupGuideState(state);
+ if(state.startupGuide.step <= 0) return;
+ state.startupGuide.step -= 1;
+ state.startupGuide.message = "";
+ render();
+ saveStateQuietly();
+}
+
+function startupGuideComplete(openParentView = false){
+ ensureStartupGuideState(state);
+ state.startupGuide.active = false;
+ state.startupGuide.completed = true;
+ state.startupGuide.step = 0;
+ state.startupGuide.message = "";
+ if(openParentView){
+  state.tab = "parent";
+  state.parentAuthenticated = true;
+  state.parentLoginError = "";
+  state.settings.parentPanel = "setup";
+ } else {
+  state.tab = "child";
+  state.childScreen = "home";
+  state.childTab = "apps";
+ }
+ render();
+ saveStateQuietly();
 }
 
 function activeStudentCount(){
@@ -6887,9 +7241,10 @@ function escapeHtml(value){
 }
 
 function parentLoginView(){
+ const parentGreetingName = cleanMailValue(state.settings.parentName) || "Parent";
  return `
  <div class="parent-login-greeting">
-   <div class="parent-login-greeting-title">Welcome back Mr. Derden!</div>
+   <div class="parent-login-greeting-title">Welcome back ${escapeHtml(parentGreetingName)}!</div>
    <div class="parent-login-greeting-sub">Use the button below to open the dashboard. Temporary one-tap parent access is turned on right now.</div>
  </div>
 
@@ -6920,6 +7275,205 @@ function currentPanelLabel(){
 
 function rewardMinutesLabel(){
   return `${Number(state.settings.passWaitMinutes || 20)}m reward`;
+}
+
+function startupGuideNext(){
+ ensureStartupGuideState(state);
+ const step = Number(state.startupGuide.step || 0);
+ setStartupGuideMessage("");
+
+ if(step === 1 && !String(state.settings.childName || "").trim()){
+  setStartupGuideMessage("Add your student's name to keep the app personal from the start.");
+  render();
+  return;
+ }
+
+ if(step === 3){
+  const draft = startupGuideDraft();
+  const hasAnyParentValue = Boolean(String(draft.name || "").trim() || String(draft.email || "").trim() || String(draft.phone || "").trim());
+  if(hasAnyParentValue){
+   const result = saveParentContactData(draft, { allowEmpty: true, suppressStatus: true });
+   if(result.error === "invalid_phone"){
+    setStartupGuideMessage("Enter a full cell number, like 555-123-4567 or +15551234567.");
+    render();
+    return;
+   }
+  }
+ }
+
+ if(step >= STARTUP_GUIDE_STEP_COUNT - 1){
+  startupGuideComplete(false);
+  return;
+ }
+
+ state.startupGuide.step = step + 1;
+ render();
+ saveStateQuietly();
+}
+
+function startupGuideView(){
+ ensureStartupGuideState(state);
+ const step = Number(state.startupGuide.step || 0);
+ const showClose = state.startupGuide.completed === true;
+ const draft = startupGuideDraft();
+ const parentContactSummary = draft.email ? escapeHtml(draft.email) : draft.phone ? escapeHtml(displayParentPhone(draft.phone)) : "No parent contact added yet";
+ let title = "";
+ let sub = "";
+ let body = "";
+ let primaryLabel = "Next";
+
+ if(step === 0){
+  title = "Let's get Study Gate ready";
+  sub = "This startup guide runs the first time the app opens on a new device so families can start with the right settings.";
+  primaryLabel = "Start setup";
+  body = `
+  <div class="startup-guide-section">
+   <div class="group-title" style="color:royalblue;">What happens in this setup</div>
+   <ul class="startup-guide-list">
+    <li><span class="startup-guide-badge">1</span><span>Name your student and set the main grade level.</span></li>
+    <li><span class="startup-guide-badge">2</span><span>Choose quiz length, pass target, and reward timing.</span></li>
+    <li><span class="startup-guide-badge">3</span><span>Add a parent email or phone for updates whenever you are ready.</span></li>
+    <li><span class="startup-guide-badge">4</span><span>Finish with a quick summary, then jump straight into the app.</span></li>
+   </ul>
+  </div>
+  <div class="startup-guide-grid two">
+   <div class="startup-guide-section">
+    <div class="group-title" style="color:royalblue;">Best on phones</div>
+    <div class="small">After setup, families can add Study Gate to the home screen for a cleaner app-like launch.</div>
+   </div>
+   <div class="startup-guide-section">
+    <div class="group-title" style="color:royalblue;">Saved on this device</div>
+    <div class="small">Progress, rules, and parent contact details stay on the phone or tablet that completes setup.</div>
+   </div>
+  </div>`;
+ } else if(step === 1){
+  title = "Student profile";
+  sub = "Start with the basics so the child view feels personal immediately.";
+  body = `
+  <div class="startup-guide-grid">
+   <div class="startup-guide-section">
+    <div class="small">Student name</div>
+    <input id="startup-child-name-input" type="text" placeholder="Enter your student's name" value="${escapeHtml(String(state.settings.childName || ""))}" />
+    <div class="startup-guide-note">This name appears on the child tab and in parent updates.</div>
+   </div>
+   <div class="startup-guide-grid two">
+    <div class="startup-guide-section">
+     <div class="small">Main grade</div>
+     <select id="startup-grade-select">
+      ${[3,4,5,6,7,8,9,10,11,12].map(g => `<option value="${g}" ${Number(state.settings.grade || 5) === g ? "selected" : ""}>${gradeLabel(g)}</option>`).join("")}
+     </select>
+     <div class="startup-guide-note">This applies the same grade across math, ELA, science, and history.</div>
+    </div>
+    <div class="startup-guide-section">
+     <div class="small">Curriculum</div>
+     <select id="startup-curriculum-standard-select">
+      ${curriculumStandardOptions(selectedCurriculumStandard())}
+     </select>
+     <div class="startup-guide-note">You can fine-tune specific areas later inside Parent View.</div>
+    </div>
+   </div>
+  </div>`;
+ } else if(step === 2){
+  title = "Quiz rules";
+  sub = "Set the default gate rules before a child opens their first app.";
+  body = `
+  <div class="startup-guide-grid two">
+   <div class="startup-guide-section">
+    <div class="small">Questions per quiz</div>
+    <select id="startup-question-count-select">
+     ${[5,10,15,20].map(v => `<option value="${v}" ${Number(state.settings.questionCount || 20) === v ? "selected" : ""}>${v} questions</option>`).join("")}
+    </select>
+   </div>
+   <div class="startup-guide-section">
+    <div class="small">Pass threshold</div>
+    <select id="startup-pass-threshold-select">
+     ${[70,80,90].map(v => `<option value="${v}" ${Number(state.settings.passThreshold || 80) === v ? "selected" : ""}>${v}%</option>`).join("")}
+    </select>
+   </div>
+   <div class="startup-guide-section">
+    <div class="small">Time after failed quiz</div>
+    <select id="startup-fail-wait-select">
+     ${[5,10,15,30,45,60].map(v => `<option value="${v}" ${Number(state.settings.failWaitMinutes || 15) === v ? "selected" : ""}>${v} minutes</option>`).join("")}
+    </select>
+   </div>
+   <div class="startup-guide-section">
+    <div class="small">Time after passed quiz</div>
+    <select id="startup-pass-wait-select">
+     ${[20,40,60,80,100,120,140,160].map(v => `<option value="${v}" ${Number(state.settings.passWaitMinutes || 20) === v ? "selected" : ""}>${v} minutes</option>`).join("")}
+    </select>
+   </div>
+  </div>
+  <div class="startup-guide-note">These are the main defaults. Parent View still has the full setup dashboard later.</div>`;
+ } else if(step === 3){
+  title = "Parent contact";
+  sub = "Add a parent email or phone if you want quiz result updates on this device.";
+  primaryLabel = "Review summary";
+  body = `
+  <div class="startup-guide-grid">
+   <div class="startup-guide-grid two">
+    <div class="startup-guide-section">
+     <div class="small">Parent name</div>
+     <input id="startup-parent-name-input" type="text" placeholder="Enter parent name" value="${escapeHtml(String(draft.name || ""))}" />
+    </div>
+    <div class="startup-guide-section">
+     <div class="small">Parent email</div>
+     <input id="startup-parent-email-input" type="text" inputmode="email" autocomplete="email" placeholder="name@email.com" value="${escapeHtml(String(draft.email || ""))}" />
+    </div>
+   </div>
+   <div class="startup-guide-section">
+    <div class="small">Cell phone</div>
+    <input id="startup-parent-phone-input" type="text" inputmode="tel" autocomplete="tel" placeholder="555-123-4567" value="${escapeHtml(String(draft.phone || ""))}" />
+    <div class="startup-guide-note">Email or phone is optional here. If you leave this blank, you can add it later in Parent View.</div>
+   </div>
+  </div>`;
+ } else {
+  title = "Ready to start";
+  sub = "Here is the setup the app will use the moment the child view opens.";
+  body = `
+  <div class="startup-guide-grid two">
+   <div class="startup-guide-section">
+    <div class="group-title" style="color:royalblue;">Student</div>
+    <div class="item" style="margin-top:10px;"><div>Name</div><div class="pill">${escapeHtml(childDisplayName())}</div></div>
+    <div class="item" style="margin-top:10px;"><div>Grade</div><div class="pill">${gradeLabel(Number(state.settings.grade || 5))}</div></div>
+    <div class="item" style="margin-top:10px;"><div>Curriculum</div><div class="pill">${selectedCurriculumStandard() === "common_core" ? "Common Core" : "General Practice"}</div></div>
+   </div>
+   <div class="startup-guide-section">
+    <div class="group-title" style="color:royalblue;">Quiz rules</div>
+    <div class="item" style="margin-top:10px;"><div>Questions</div><div class="pill">${Number(state.settings.questionCount || 20)}</div></div>
+    <div class="item" style="margin-top:10px;"><div>Pass target</div><div class="pill">${Number(state.settings.passThreshold || 80)}%</div></div>
+    <div class="item" style="margin-top:10px;"><div>Reward</div><div class="pill">${Number(state.settings.passWaitMinutes || 20)} minutes</div></div>
+   </div>
+  </div>
+  <div class="startup-guide-section">
+   <div class="group-title" style="color:royalblue;">Parent contact</div>
+   <div class="small" style="margin-top:8px;">${parentContactSummary}</div>
+   <div class="startup-guide-note" style="margin-top:8px;">You can reopen this guide anytime from Parent View -> Setup.</div>
+  </div>`;
+ }
+
+ return `
+ <div class="startup-guide-overlay">
+  <div class="startup-guide-card">
+   <div class="startup-guide-head">
+    <div class="startup-guide-eyebrow">Startup Guide</div>
+    <div class="startup-guide-title">${title}</div>
+    <div class="startup-guide-sub">${sub}</div>
+    <div class="startup-guide-progress"><div class="startup-guide-progress-fill" style="width:${startupGuideProgressPercent()}%;"></div></div>
+    <div class="startup-guide-step-label">Step ${step + 1} of ${STARTUP_GUIDE_STEP_COUNT}</div>
+   </div>
+   <div class="startup-guide-body">${body}</div>
+   <div class="startup-guide-footer">
+    <div>
+     ${showClose ? `<button id="startup-guide-close-btn" type="button" class="startup-guide-close">Close tutorial</button>` : `<div class="startup-guide-note">New installs open this guide automatically the first time the app launches.</div>`}
+    </div>
+    <div class="startup-guide-actions">
+     ${step > 0 ? `<button id="startup-guide-back-btn" type="button" class="startup-guide-btn secondary">Back</button>` : ``}
+     ${step === STARTUP_GUIDE_STEP_COUNT - 1 ? `<button id="startup-guide-open-parent-btn" type="button" class="startup-guide-btn secondary">Open Parent View</button><button id="startup-guide-finish-btn" type="button" class="startup-guide-btn primary">Start Study Gate</button>` : `<button id="startup-guide-next-btn" type="button" class="startup-guide-btn primary">${primaryLabel}</button>`}
+    </div>
+    <div class="startup-guide-message" id="startup-guide-message">${escapeHtml(state.startupGuide.message || "")}</div>
+   </div>
+  </div>
+ </div>`;
 }
 
 function parentView() {
@@ -7287,9 +7841,15 @@ const parentInfoCard = `
  <div class="small" style="margin-top:8px;">${randomQuizSelectionEnabled() ? "Next quiz subject will be chosen randomly from the active subjects scheduled for today." : "Off: the selected subject will be used for the next quiz."}</div>
  </div>
 
- <div class="setting-group">
+<div class="setting-group">
  <div class="group-title" style="color:royalblue;">Parent Access Button</div>
  <div class="small">Parent View stays opened with one tap for now. Use the button on the login card to enter Parent View.</div>
+</div>
+
+<div class="setting-group">
+ <div class="group-title" style="color:royalblue;">Startup Tutorial</div>
+ <div class="small">Open the same step-by-step startup guide that new devices see the first time the app launches.</div>
+ <button id="rerun-startup-guide-btn" type="button" class="secondary tap-anim" style="margin-top:12px;width:100%;">Run Startup Tutorial</button>
 </div>
 
 <div class="setting-group">
@@ -7475,6 +8035,9 @@ function bindDynamicHandlers() {
  const parentPanelParent = document.getElementById("parent-panel-parent");
  if(parentPanelParent) parentPanelParent.onclick = () => updateSetting("parentPanel", "parent");
 
+ const rerunStartupGuideBtn = document.getElementById("rerun-startup-guide-btn");
+ if(rerunStartupGuideBtn) rerunStartupGuideBtn.onclick = () => openStartupGuide(0);
+
  const createStudentProfileBtn = document.getElementById("create-student-profile-btn");
  if(createStudentProfileBtn) createStudentProfileBtn.onclick = () => {
   const input = document.getElementById("new-student-name-input");
@@ -7497,6 +8060,89 @@ function bindDynamicHandlers() {
  if(parentLoginBtnFallback){
   parentLoginBtnFallback.addEventListener("click", enterParentView);
  }
+
+ const startupGuideCloseBtn = document.getElementById("startup-guide-close-btn");
+ if(startupGuideCloseBtn) startupGuideCloseBtn.onclick = closeStartupGuide;
+
+ const startupGuideBackBtn = document.getElementById("startup-guide-back-btn");
+ if(startupGuideBackBtn) startupGuideBackBtn.onclick = startupGuideBack;
+
+ const startupGuideNextBtn = document.getElementById("startup-guide-next-btn");
+ if(startupGuideNextBtn) startupGuideNextBtn.onclick = startupGuideNext;
+
+ const startupGuideFinishBtn = document.getElementById("startup-guide-finish-btn");
+ if(startupGuideFinishBtn) startupGuideFinishBtn.onclick = () => startupGuideComplete(false);
+
+ const startupGuideOpenParentBtn = document.getElementById("startup-guide-open-parent-btn");
+ if(startupGuideOpenParentBtn) startupGuideOpenParentBtn.onclick = () => startupGuideComplete(true);
+
+ const startupChildNameInput = document.getElementById("startup-child-name-input");
+ if(startupChildNameInput){
+  startupChildNameInput.oninput = e => {
+   state.settings.childName = e.target.value;
+   setStartupGuideMessage("");
+   saveStateQuietly();
+   const childTab = document.getElementById("tab-child");
+   if(childTab) childTab.textContent = `${childDisplayName()} View`;
+  };
+ }
+
+ const startupGradeSelect = document.getElementById("startup-grade-select");
+ if(startupGradeSelect) startupGradeSelect.onchange = e => {
+  setAllSubjectGrades(e.target.value);
+  setStartupGuideMessage("");
+ };
+
+ const startupCurriculum = document.getElementById("startup-curriculum-standard-select");
+ if(startupCurriculum) startupCurriculum.onchange = e => {
+  updateCurriculumStandard(e.target.value);
+  setStartupGuideMessage("");
+ };
+
+ const startupQuestionCount = document.getElementById("startup-question-count-select");
+ if(startupQuestionCount) startupQuestionCount.onchange = e => {
+  state.settings.questionCount = Number(e.target.value || 20);
+  saveStateQuietly();
+ };
+
+ const startupPassThreshold = document.getElementById("startup-pass-threshold-select");
+ if(startupPassThreshold) startupPassThreshold.onchange = e => {
+  state.settings.passThreshold = Number(e.target.value || 80);
+  saveStateQuietly();
+ };
+
+ const startupFailWait = document.getElementById("startup-fail-wait-select");
+ if(startupFailWait) startupFailWait.onchange = e => {
+  state.settings.failWaitMinutes = Number(e.target.value || 15);
+  saveStateQuietly();
+ };
+
+ const startupPassWait = document.getElementById("startup-pass-wait-select");
+ if(startupPassWait) startupPassWait.onchange = e => {
+  state.settings.passWaitMinutes = Number(e.target.value || 20);
+  saveStateQuietly();
+ };
+
+ const startupParentNameInput = document.getElementById("startup-parent-name-input");
+ if(startupParentNameInput) startupParentNameInput.oninput = e => {
+  startupGuideDraft().name = e.target.value;
+  setStartupGuideMessage("");
+  saveStateQuietly();
+ };
+
+ const startupParentEmailInput = document.getElementById("startup-parent-email-input");
+ if(startupParentEmailInput) startupParentEmailInput.oninput = e => {
+  startupGuideDraft().email = e.target.value;
+  setStartupGuideMessage("");
+  saveStateQuietly();
+ };
+
+ const startupParentPhoneInput = document.getElementById("startup-parent-phone-input");
+ if(startupParentPhoneInput) startupParentPhoneInput.oninput = e => {
+  startupGuideDraft().phone = e.target.value;
+  setStartupGuideMessage("");
+  saveStateQuietly();
+ };
 
  document.querySelectorAll(".review-choice").forEach(btn => {
   btn.onclick = () => {
@@ -7659,6 +8305,7 @@ function bindDynamicHandlers() {
 
 function render() {
  ensureStudentProfiles();
+ ensureStartupGuideState(state);
  ensureValidSubjectSelections();
  ensureValidCurriculumSettings();
  normalizeParentContacts();
@@ -7675,7 +8322,7 @@ function render() {
  document.getElementById("tab-child").classList.toggle("active", state.tab === "child");
  document.getElementById("tab-parent").classList.toggle("active", state.tab === "parent");
  document.getElementById("tab-child").textContent = `${childDisplayName()} View`;
- screenEl.innerHTML = state.tab === "child" ? childView() : parentView();
+ screenEl.innerHTML = `${state.tab === "child" ? childView() : parentView()}${startupGuideVisible() ? startupGuideView() : ""}`;
  bindDynamicHandlers();
 }
 
